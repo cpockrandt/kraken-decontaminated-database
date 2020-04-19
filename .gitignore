@@ -1,0 +1,5 @@
+build
+.idea
+cmake-debug-build
+conterminator_refseq_and_genbank
+database

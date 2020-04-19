@@ -1,0 +1,9 @@
+[submodule "include/seqan"]
+	path = include/seqan
+	url = https://github.com/seqan/seqan
+[submodule "include/seqan3"]
+	path = include/seqan3
+	url = https://github.com/seqan/seqan3
+[submodule "include/KMC"]
+	path = include/KMC
+	url = https://github.com/refresh-bio/KMC
