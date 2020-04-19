@@ -7,8 +7,8 @@ PATH_TO_KMC="./kmc" # path to binary of kmer counter KMC3
 #########################################################
 
 CONTERMINATOR_FILE="./conterminator_refseq_and_genbank"
-PATH_TO_CONTERMINATOR_HELPER="./build/bin/decontam_conterminator"
-PATH_TO_CONTAMINATION_CLEANUP="./build/bin/decontam_kmer"
+PATH_TO_CONTERMINATOR_HELPER="./build/decontam_conterminator"
+PATH_TO_CONTAMINATION_CLEANUP="./build/decontam_kmer"
 
 function check_command {
   if ! [ -x "$(command -v $1)" ]; then
@@ -33,6 +33,7 @@ check_command "krakenuniq-download"
 check_command "dustmasker"
 check_command "wget"
 check_command "gunzip"
+check_command "rsync"
 
 echo "This script runs GNU parallel. Please check out 'parallel --citation'"
 
@@ -206,7 +207,7 @@ done
 
 # extract sequence ids from dna viral neighbors
 echo "id\tseqlen" > dna_viral_neighbors_ids
-find datebase/library/viral/Neighbors -type f -name '*.fasta' -print | xargs awk -F ' ' '($0 ~ /^>/) { if (NR > 1) { print len } len = 0; printf "%s\t%s\t", substr($1, 2), FILENAME } !($0 ~ /^>/) { len += length($0) } END{ print len }' >> dna_viral_neighbors_ids
+find database/library/viral/Neighbors -type f -name '*.fasta' -print | xargs awk -F ' ' '($0 ~ /^>/) { if (NR > 1) { print len } len = 0; printf "%s\t%s\t", substr($1, 2), FILENAME } !($0 ~ /^>/) { len += length($0) } END{ print len }' >> dna_viral_neighbors_ids
 
 # compute overlaps with conterminator data
 awk -F$'\t' 'FNR==NR{ f[$2]=$0; next } { if ($1 in f) { print $0 "\t" f[$1]} }' ${CONTERMINATOR_FILE} dna_ids > dna_ids_overlap
